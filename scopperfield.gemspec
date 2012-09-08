@@ -14,4 +14,13 @@ Gem::Specification.new do |gem|
   gem.name          = "scopperfield"
   gem.require_paths = ["lib"]
   gem.version       = Scopperfield::VERSION
+
+  gem.add_dependency "rails", "~> 3.2.0"
+
+  gem.add_development_dependency "redcarpet", "~> 1.17"
+  gem.add_development_dependency "yard", "~> 0.7.5"
+  gem.add_development_dependency "rspec-rails"
+  gem.add_development_dependency "sqlite3"
+  gem.add_development_dependency "factory_girl_rails"
+  gem.add_development_dependency "database_cleaner"
 end
