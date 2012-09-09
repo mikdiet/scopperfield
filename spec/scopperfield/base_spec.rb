@@ -18,6 +18,22 @@ describe Scopperfield::Base do
   end
 
   describe "simple behavior" do
+    let!(:book1){ FactoryGirl.create :book, :cover => 'paper' }
+    let!(:book2){ FactoryGirl.create :book, :cover => 'hard' }
 
+    it "uses accessible scope" do
+      Book.scopperfield(:paper_covered => true).should include book1
+      Book.scopperfield(:paper_covered => true).should_not include book2
+    end
+
+    it "is not use accessible scope" do
+      Book.scopperfield(:paper_covered => false).should include book1
+      Book.scopperfield(:paper_covered => false).should include book2
+    end
+
+    it "never uses unaccessible scope" do
+      Book.scopperfield(:hard_covered => true).should include book1
+      Book.scopperfield(:hard_covered => true).should include book2
+    end
   end
 end

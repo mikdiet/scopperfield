@@ -7,7 +7,24 @@ class Book < ActiveRecord::Base
     def paper_covered
       where(:cover => 'paper')
     end
+
+    def hard_covered
+      where(:cover => 'hard')
+    end
+
+    def leather_covered
+      where(:cover => 'leather')
+    end
+
+    def readed
+      where(:readed => true)
+    end
+
+    def unreaded
+      where(:readed => false)
+    end
   end
 
-  scope_accessible :paper_covered
+  scope_accessible :paper_covered, :readed, :unreaded
+  scope_invertible :readed => :unreaded
 end
