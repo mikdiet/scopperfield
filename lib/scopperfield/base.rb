@@ -9,6 +9,7 @@ module Scopperfield
     module ClassMethods
 
       def scope_accessible(*scopes)
+        scopperfield_model.class.register_accessible_scopes(*scopes)
         @accessible_scopperfield_scopes = (accessible_scopperfield_scopes + scopes.map(&:to_sym)).uniq
       end
 
@@ -32,7 +33,8 @@ module Scopperfield
       def scopperfield_scope(params, options = {})
         result_scope = scoped
         if params.is_a? Hash
-          params.each do |name, value|
+          scopperfield_model.assign_attributes(params)
+          scopperfield_model.attributes.each do |name, value|
             next unless accessible_scope?(name)
             if value
               result_scope = result_scope.send(name)

@@ -1,0 +1,41 @@
+<h1>Listing books</h1>
+
+<%= form_for Book.scopperfield, :url => books_path, :method => :get do |f| %>
+  <%= f.label :paper_covered %>
+  <%= f.check_box :paper_covered %>
+  <%= f.label :readed %>
+  <%= f.check_box :readed %>
+  <%= f.submit "Search" %>
+<% end %>
+
+<%= debug Book.scopperfield.attributes %>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Cover</th>
+    <th>Readed</th>
+    <th>Readed at</th>
+    <th>Pages</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @books.each do |book| %>
+  <tr>
+    <td><%= book.name %></td>
+    <td><%= book.cover %></td>
+    <td><%= book.readed %></td>
+    <td><%= book.readed_at %></td>
+    <td><%= book.pages %></td>
+    <td><%= link_to 'Show', book %></td>
+    <td><%= link_to 'Edit', edit_book_path(book) %></td>
+    <td><%= link_to 'Destroy', book, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Book', new_book_path %>
