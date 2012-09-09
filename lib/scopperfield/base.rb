@@ -13,6 +13,7 @@ module Scopperfield
       end
 
       def scope_invertible(list)
+        invertible_scopperfield_scopes.merge! list
       end
 
       # Syntactic sugar
@@ -32,8 +33,15 @@ module Scopperfield
         result_scope = scoped
         if params.is_a? Hash
           params.each do |name, value|
-            next unless accessible_scopperfield_scopes.include? name.to_sym
-            result_scope = result_scope.send(name) if value
+            next unless accessible_scope?(name)
+            if value
+              result_scope = result_scope.send(name)
+            else
+              invertion = scope_invertion_of(name)
+              if invertion && accessible_scope?(invertion)
+                result_scope = result_scope.send(invertion)
+              end
+            end
           end
         end
         result_scope
@@ -42,6 +50,18 @@ module Scopperfield
     protected
       def accessible_scopperfield_scopes
         @accessible_scopperfield_scopes ||= []
+      end
+
+      def accessible_scope?(name)
+        accessible_scopperfield_scopes.include? name.to_sym
+      end
+
+      def invertible_scopperfield_scopes
+        @invertible_scopperfield_scopes ||= {}.with_indifferent_access
+      end
+
+      def scope_invertion_of(name)
+        invertible_scopperfield_scopes[name]
       end
     end
   end

@@ -1,6 +1,7 @@
 module Scopperfield
   class Models
     include ActiveModel::AttributeMethods
+    include ActiveModel::MassAssignmentSecurity
     extend ActiveModel::Naming
 
     class << self

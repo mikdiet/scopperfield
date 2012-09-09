@@ -36,4 +36,20 @@ describe Scopperfield::Base do
       Book.scopperfield(:hard_covered => true).should include book2
     end
   end
+
+  describe "invertible behavior" do
+    let!(:book1){ FactoryGirl.create :book, :readed => true }
+    let!(:book2){ FactoryGirl.create :book, :readed => false }
+
+    it "uses accessible scope" do
+      Book.scopperfield(:readed => true).should include book1
+      Book.scopperfield(:readed => true).should_not include book2
+    end
+
+    it "uses inverted accessible scope" do
+      Book.scopperfield(:readed => false).should_not include book1
+      Book.scopperfield(:readed => false).should include book2
+    end
+
+  end
 end
