@@ -1,6 +1,6 @@
 <h1>Listing books</h1>
 
-<%= form_for Book.scopperfield, :url => books_path, :method => :get do |f| %>
+<%= form_for @books.scopperfield, :url => books_path, :method => :get do |f| %>
   <%= f.label :paper_covered %>
   <%= f.check_box :paper_covered %>
   <%= f.label :readed %>
@@ -8,7 +8,7 @@
   <%= f.submit "Search" %>
 <% end %>
 
-<%= debug Book.scopperfield.attributes %>
+<%= debug @books.scopperfield.attributes %>
 
 <table>
   <tr>

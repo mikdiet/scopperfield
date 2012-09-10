@@ -3,13 +3,13 @@ module Scopperfield
     extend ActiveSupport::Concern
 
     included do
-      @scopperfield_model = const_set(name.pluralize, Class.new(Scopperfield::Models)).new
+      @scopperfield_class = const_set(name.pluralize, Class.new(Scopperfield::Models))
     end
 
     module ClassMethods
 
       def scope_accessible(*scopes)
-        scopperfield_model.class.register_accessible_scopes(*scopes)
+        scopperfield_class.register_accessible_scopes(*scopes)
       end
 
       def scope_invertible(list)
@@ -25,15 +25,20 @@ module Scopperfield
         end
       end
 
-      def scopperfield_model
-        @scopperfield_model
+      def scopperfield_class
+        @scopperfield_class
+      end
+
+      def scopperfield_model(rel = scoped)
+        rel.instance_variable_get(:@scopperfield_model) || scopperfield_class.new
       end
 
       def scopperfield_scope(params, options = {})
         result_scope = scoped
+        result_scope.instance_variable_set :@scopperfield_model, scopperfield_model
         if params.is_a? Hash
-          scopperfield_model.assign_attributes(params)
-          scopperfield_model.attributes.each do |name, value|
+          scopperfield_model(result_scope).assign_attributes(params)
+          scopperfield_model(result_scope).attributes.each do |name, value|
             if value
               result_scope = result_scope.send(name)
             else

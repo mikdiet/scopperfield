@@ -2,7 +2,7 @@ class BooksController < ApplicationController
   # GET /books
   # GET /books.json
   def index
-    @books = Book.scopperfield params[:books]
+    @books = Book.scopperfield(params[:books])
 
     respond_to do |format|
       format.html # index.html.erb
