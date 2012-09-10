@@ -10,7 +10,6 @@ module Scopperfield
 
       def scope_accessible(*scopes)
         scopperfield_model.class.register_accessible_scopes(*scopes)
-        @accessible_scopperfield_scopes = (accessible_scopperfield_scopes + scopes.map(&:to_sym)).uniq
       end
 
       def scope_invertible(list)
@@ -35,12 +34,11 @@ module Scopperfield
         if params.is_a? Hash
           scopperfield_model.assign_attributes(params)
           scopperfield_model.attributes.each do |name, value|
-            next unless accessible_scope?(name)
             if value
               result_scope = result_scope.send(name)
             else
               invertion = scope_invertion_of(name)
-              if invertion && accessible_scope?(invertion)
+              if invertion
                 result_scope = result_scope.send(invertion)
               end
             end
@@ -50,14 +48,6 @@ module Scopperfield
       end
 
     protected
-      def accessible_scopperfield_scopes
-        @accessible_scopperfield_scopes ||= []
-      end
-
-      def accessible_scope?(name)
-        accessible_scopperfield_scopes.include? name.to_sym
-      end
-
       def invertible_scopperfield_scopes
         @invertible_scopperfield_scopes ||= {}.with_indifferent_access
       end
